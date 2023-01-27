@@ -78,16 +78,22 @@ for i, frame in enumerate(frames):
       n.append(frame)
     left=np.float32(frame)
 
-writer = cv2.VideoWriter("output.avi",
-cv2.VideoWriter_fourcc(*"MJPG"), 30,(640,480))
+fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,480))
 
-for frame in range(1000):
-    writer.write(np.random.randint(0, 255, (480,640,3)).astype('uint8'))
+while(capture.isOpened()):
+    ret, n = capture.read()
+   
+    # write the flipped frame
+    out.write(display_frames(n))
 
+    cv2.imshow("Frames", display_frames(n))
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
 
 
 
 capture.release()
-writer.release()
+out.release()
 cv2.destroyAllWindows()
